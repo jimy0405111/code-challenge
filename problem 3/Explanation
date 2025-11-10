@@ -1,0 +1,10 @@
+| Issue                                                | Why it's a problem                         | Fix                                   |
+| ---------------------------------------------------- | ------------------------------------------ | ------------------------------------- |
+| `getPriority` recreated each render                  | Minor CPU overhead                         | Move outside component                |
+| Filter logic uses undefined `lhsPriority`            | Likely runtime error                       | Use proper variable `balancePriority` |
+| `filter` + `sort` calls `getPriority` multiple times | Redundant computation                      | Compute priority once per balance     |
+| `formattedBalances` unused                           | Wasteful computation                       | Either use it or remove               |
+| `rows` maps over unformatted balances                | Recomputes USD & formatting each render    | Precompute in `useMemo`               |
+| `key={index}`                                        | React may reuse DOM incorrectly            | Use unique key (`currency`)           |
+| `useMemo` depends on `prices` object                 | Object reference changes trigger recompute | Use stable values or memoize `prices` |
+| `any` and missing interface fields                   | Type safety issues                         | Use proper types                      |
