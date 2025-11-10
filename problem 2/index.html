@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Currency Swap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="swap-container">
+    <form id="swap-form" onsubmit="return false;">
+      <h2>Swap Tokens</h2>
+
+      <div class="swap-row">
+        <label for="from-token">From</label>
+        <div class="input-group">
+          <input type="number" id="input-amount" placeholder="0.00" min="0" step="any">
+          <select id="from-token"></select>
+        </div>
+      </div>
+
+      <div class="swap-row">
+        <label for="to-token">To</label>
+        <div class="input-group">
+          <input type="number" id="output-amount" placeholder="0.00" readonly>
+          <select id="to-token"></select>
+        </div>
+      </div>
+
+      <div id="error-msg" class="error"></div>
+
+      <button id="swap-btn">CONFIRM SWAP</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
