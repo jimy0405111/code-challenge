@@ -1,0 +1,57 @@
+interface WalletBalance {
+  currency: string;
+  amount: number;
+  blockchain: string;
+}
+
+interface FormattedWalletBalance extends WalletBalance {
+  formatted: string;
+  priority: number;
+  usdValue: number;
+}
+
+interface Props extends BoxProps {}
+
+const PRIORITY_MAP: Record<string, number> = {
+  Osmosis: 100,
+  Ethereum: 50,
+  Arbitrum: 30,
+  Zilliqa: 20,
+  Neo: 20
+};
+
+const getPriority = (blockchain: string): number => {
+  return PRIORITY_MAP[blockchain] ?? -99;
+};
+
+const WalletPage: React.FC<Props> = (props: Props) => {
+  const { children, ...rest } = props;
+  const balances = useWalletBalances();
+  const prices = usePrices();
+
+  const formattedBalances = useMemo(() => {
+    return balances
+      .map((b) => {
+        const priority = getPriority(b.blockchain);
+        const formatted = b.amount.toFixed();
+        const usdValue = prices[b.currency] ? prices[b.currency] * b.amount : 0;
+        return { ...b, formatted, priority, usdValue };
+      })
+      .filter((b) => b.priority > -99 && b.amount > 0)
+      .sort((a, b) => b.priority - a.priority);
+  }, [balances, prices]);
+
+  return (
+    <div {...rest}>
+      {formattedBalances.map((balance) => (
+        <WalletRow
+          key={balance.currency}
+          className={classes.row}
+          amount={balance.amount}
+          usdValue={balance.usdValue}
+          formattedAmount={balance.formatted}
+        />
+      ))}
+    </div>
+  );
+};
